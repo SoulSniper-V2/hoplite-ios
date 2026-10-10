@@ -1,0 +1,10 @@
+*.xcodeproj/
+build/
+build-device/
+DerivedData/
+*.xcresult/
+*.xcarchive/
+*.dSYM/
+.DS_Store
+*.xcuserstate
+shots/

@@ -1,0 +1,122 @@
+name: Hoplite
+options:
+  bundleIdPrefix: sh.hoplite
+  deploymentTarget:
+    iOS: "26.1"
+  createIntermediateGroups: true
+  developmentLanguage: en
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
+    SWIFT_APPROACHABLE_CONCURRENCY: YES
+    SWIFT_UPCOMING_FEATURE_NONISOLATED_NONSENDING_BY_DEFAULT: YES
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+    CODE_SIGN_STYLE: Automatic
+    MARKETING_VERSION: "1.0.0"
+    CURRENT_PROJECT_VERSION: "1"
+targets:
+  Hoplite:
+    type: application
+    platform: iOS
+    sources:
+      - path: Hoplite
+    dependencies:
+      - target: HopliteWidgets
+        embed: true
+    info:
+      path: Hoplite/Info.plist
+      properties:
+        CFBundleDisplayName: Hoplite
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        ITSAppUsesNonExemptEncryption: false
+        LSApplicationQueriesSchemes: [https]
+        UILaunchScreen:
+          UIColorName: LaunchBackground
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+        UIAppFonts:
+          - FunnelSans.ttf
+          - FunnelSans-Italic.ttf
+          - FunnelDisplay.ttf
+          - GeistMono.ttf
+          - Redaction35-Italic.ttf
+          - Redaction50-Italic.ttf
+        CFBundleURLTypes:
+          - CFBundleURLName: sh.hoplite.mobile.oauth
+            CFBundleURLSchemes: [hoplite-ios]
+        NSPhotoLibraryUsageDescription: Attach screenshots and images to a thread.
+        NSSupportsLiveActivities: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: sh.hoplite.mobile
+        PRODUCT_NAME: Hoplite
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        TARGETED_DEVICE_FAMILY: "1"
+        GENERATE_INFOPLIST_FILE: NO
+  HopliteWidgets:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: HopliteWidgets
+      - path: Hoplite/Shared
+      - path: Hoplite/Design/Theme.swift
+      - path: Hoplite/Resources/Fonts
+        buildPhase: resources
+    info:
+      path: HopliteWidgets/Info.plist
+      properties:
+        CFBundleDisplayName: Hoplite
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+        UIAppFonts:
+          - FunnelSans.ttf
+          - FunnelDisplay.ttf
+          - GeistMono.ttf
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: sh.hoplite.mobile.widgets
+        PRODUCT_NAME: HopliteWidgets
+        TARGETED_DEVICE_FAMILY: "1"
+        GENERATE_INFOPLIST_FILE: NO
+        SKIP_INSTALL: YES
+  HopliteTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: HopliteTests
+    dependencies:
+      - target: Hoplite
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: sh.hoplite.mobile.tests
+        GENERATE_INFOPLIST_FILE: YES
+        BUNDLE_LOADER: $(TEST_HOST)
+        TEST_HOST: $(BUILT_PRODUCTS_DIR)/Hoplite.app/Hoplite
+  HopliteUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: HopliteUITests
+    dependencies:
+      - target: Hoplite
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: sh.hoplite.mobile.uitests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: Hoplite
+        SWIFT_DEFAULT_ACTOR_ISOLATION: nonisolated
+schemes:
+  Hoplite:
+    build:
+      targets:
+        Hoplite: all
+        HopliteTests: [test]
+        HopliteUITests: [test]
+    test:
+      targets: [HopliteTests, HopliteUITests]
